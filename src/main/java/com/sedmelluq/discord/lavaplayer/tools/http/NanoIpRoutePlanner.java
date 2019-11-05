@@ -29,6 +29,10 @@ public final class NanoIpRoutePlanner extends AbstractRoutePlanner {
     maskBits = ((Ipv6Block) ipBlock).getMaskBits();
   }
 
+  public long estCurrentAddress() {
+    return System.nanoTime() - startTime.longValue();
+  }
+
   @Override
   protected Tuple<InetAddress, InetAddress> determineAddressPair(final Tuple<Inet4Address, Inet6Address> remoteAddresses) throws HttpException {
     InetAddress currentAddress = null;
@@ -61,7 +65,7 @@ public final class NanoIpRoutePlanner extends AbstractRoutePlanner {
   private InetAddress getAddress() {
     final BigInteger now = BigInteger.valueOf(System.nanoTime());
     final BigInteger nanoOffset = now.subtract(startTime); // least 64 bit
-    if(maskBits == 64) {
+    if (maskBits == 64) {
       return ipBlock.getAddressAtIndex(nanoOffset);
     }
     final BigInteger randomOffset = random.nextBigInt(Ipv6Block.IPV6_BIT_SIZE - maskBits).shiftLeft(Ipv6Block.IPV6_BIT_SIZE - maskBits); // most {{maskBits}}-64 bit

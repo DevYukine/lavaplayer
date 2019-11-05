@@ -42,6 +42,14 @@ public final class RotatingNanoIpRoutePlanner extends AbstractRoutePlanner {
       throw new IllegalArgumentException("Please use a bigger IPv6 Block!");
   }
 
+  public BigInteger getCurrentBlock() {
+    return currentBlock.get();
+  }
+
+  public long getEstAddressIndexInBlock() {
+    return System.nanoTime() - blockNanoStart.get().longValue();
+  }
+
   @Override
   protected Tuple<InetAddress, InetAddress> determineAddressPair(final Tuple<Inet4Address, Inet6Address> remoteAddresses) throws HttpException {
     InetAddress currentAddress = null;
